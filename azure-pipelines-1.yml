@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'  # or your actual version (6.0.x, 7.0.x, etc.)
+
+- script: dotnet restore SimpleAPI.sln
+  displayName: 'Restore dependencies'
+
+- script: dotnet build SimpleAPI.sln --configuration $(buildConfiguration)
+  displayName: 'Build solution'
+
+- script: dotnet test SimpleAPI.sln --configuration $(buildConfiguration) --no-build --verbosity normal
+  displayName: 'Run unit tests'
